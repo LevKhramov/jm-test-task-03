@@ -1,0 +1,5 @@
+worker_connections: 2048
+client_max_body_size: 512m
+php_version: 8.2
+fastcgi_pass_unix_socket_path: /run/php/php{{ php_version }}-fpm.sock
+timezone: Europe/Samara

@@ -1,0 +1,17 @@
+---
+- name: Nginx playbook
+  hosts: sandbox
+  become:
+    true
+  become_method:
+    ansible.builtin.sudo
+  become_user:
+    root
+  remote_user:
+    sandyman
+  vars_files:
+    - ./group_vars/vars.yml
+  roles:
+    - misc
+    - nginx
+    - php

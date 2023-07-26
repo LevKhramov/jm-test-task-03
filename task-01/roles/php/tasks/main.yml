@@ -1,0 +1,29 @@
+- name: Install php-fpm
+  ansible.builtin.apt:
+    name: php8.2-fpm
+
+- name: Create phpinfo file
+  ansible.builtin.copy:
+    dest: "/var/www/html/phpinfo.php"
+    content: |
+      <?php phpinfo(); ?>
+    mode: '0644'
+    owner: www-data
+    group: www-data
+
+- name: Ensure *listen* directive is set
+  community.general.ini_file:
+    path: /etc/php/{{ php_version }}/fpm/pool.d/www.conf
+    section: www
+    option: listen
+    value: "{{ fastcgi_pass_unix_socket_path }}"
+    mode: '0644'
+
+- name: Ensure *date.timezone* directive is set
+  community.general.ini_file:
+    path: /etc/php/{{ php_version }}/fpm/php.ini
+    section: Date
+    option: date.timezone
+    value: "{{ timezone }}"
+    mode: '0644'
+  notify: (handler) php-fpm reload
